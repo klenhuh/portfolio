@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kleinhugh Rotciv R. Ocharon — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0f0c;
+    --surface: #111a14;
+    --surface2: #162019;
+    --accent: #6abf7b;
+    --accent-dark: #3d7a4e;
+    --accent-glow: rgba(106,191,123,0.15);
+    --accent-muted: rgba(106,191,123,0.07);
+    --text: #e8ede9;
+    --muted: #7a9181;
+    --border: rgba(106,191,123,0.1);
+    --border-bright: rgba(106,191,123,0.28);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    width: 30px; height: 30px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    opacity: 0.45;
+  }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent-dark); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5vw;
+    background: rgba(11,15,12,0.88);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo
+   {
+    img{ height: 45px; width: auto; display: block;}
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem; font-weight: 900;
+    color: var(--text); text-decoration: none;
+    
+  }
+  .nav-logo span { color: var(--accent); font-style: italic; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.63rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--muted);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.57rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent);
+    border: 1px solid var(--border-bright);
+    padding: 0.28rem 0.75rem;
+    background: var(--accent-muted);
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    padding: 0 5vw; padding-top: 90px;
+    gap: 4rem; position: relative; overflow: hidden;
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 55px 55px;
+    opacity: 0.45; pointer-events: none;
+  }
+  .hero-glow {
+    position: absolute; width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(106,191,123,0.07) 0%, transparent 68%);
+    top: 50%; left: 40%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .hero-text { position: relative; z-index: 2; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.63rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 1.6rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.3s forwards;
+  }
+  .hero-eyebrow::before { content:''; width:28px; height:1px; background:var(--accent); }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6.5vw, 6rem);
+    font-weight: 900; line-height: 1.02;
+    opacity: 0; animation: fadeUp 0.7s ease 0.5s forwards;
+  }
+  .hero-name-italic {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6.5vw, 6rem);
+    font-weight: 900; font-style: italic;
+    color: var(--accent); line-height: 1.02;
+    margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.62s forwards;
+  }
+  .hero-pills {
+    display: flex; flex-wrap: wrap; gap: 0.45rem;
+    margin-bottom: 1.7rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.78s forwards;
+  }
+  .pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--border-bright);
+    padding: 0.3rem 0.8rem;
+    background: var(--accent-muted);
+  }
+  .hero-bio {
+    font-size: 0.97rem; line-height: 1.82;
+    color: var(--muted); max-width: 460px;
+    margin-bottom: 2.4rem;
+    opacity: 0; animation: fadeUp 0.7s ease 0.92s forwards;
+  }
+  .hero-bio strong { color: var(--text); font-weight: 500; }
+  .hero-cta {
+    display: flex; gap: 0.9rem; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.7s ease 1.06s forwards;
+  }
+  .btn {
+    display: inline-block; padding: 0.88rem 1.9rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.18em;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.25s; cursor: none; border: none;
+  }
+  .btn-primary { background: var(--accent); color: #0b0f0c; font-weight: 700; }
+  .btn-primary:hover { background: #82d494; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(106,191,123,0.28); }
+  .btn-outline { border: 1px solid var(--border-bright); color: var(--muted); background: transparent; }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Hero Photo */
+  .hero-photo-col {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; animation: fadeIn 1s ease 1.2s forwards;
+  }
+  .photo-wrap {
+    position: relative; width: 320px;
+  }
+  .photo-wrap::before {
+    content:''; position: absolute;
+    top:-14px; left:-14px; right:14px; bottom:14px;
+    border: 1px solid var(--border-bright); z-index: -1;
+  }
+  .photo-wrap::after {
+    content:''; position: absolute;
+    top:14px; left:14px; right:-14px; bottom:-14px;
+    background: var(--accent-muted); z-index: -1;
+  }
+  .photo-wrap img {
+    width: 100%; display: block;
+    filter: grayscale(12%);
+  }
+  .photo-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(11,15,12,0.92);
+    border-top: 1px solid var(--border-bright);
+    padding: 0.65rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .logo-badge {
+    position: absolute; top: -22px; right: -22px;
+    width: 86px; height: 86px;
+    background: var(--surface2);
+    border: 1px solid var(--border-bright);
+    display: flex; align-items: center; justify-content: center;
+    padding: 10px;
+  }
+  .logo-badge img { width: 66px; }
+
+  /* MARQUEE */
+  .marquee-strip {
+    background: var(--accent); overflow: hidden;
+    white-space: nowrap; padding: 0.6rem 0;
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: marquee 24s linear infinite;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.18em;
+    color: #0b0f0c; font-weight: 700; text-transform: uppercase;
+  }
+  .marquee-inner span { margin: 0 1.8rem; }
+  .msep { opacity: 0.35; }
+
+  /* SECTIONS */
+  section { padding: 7rem 5vw; }
+  .sec-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 0.7rem;
+    display: flex; align-items: center; gap: 0.7rem;
+  }
+  .sec-label::before { content:''; width:22px; height:1px; background:var(--accent); }
+  .sec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4.5vw, 3.8rem);
+    font-weight: 900; line-height: 1.08;
+    margin-bottom: 3.5rem;
+  }
+  .sec-title em { color: var(--accent); font-style: italic; }
+
+  /* WORKS GRID */
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0.9rem;
+  }
+  .wcard {
+    position: relative; overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: transform 0.35s cubic-bezier(.25,.8,.25,1), border-color 0.3s;
+    cursor: none;
+  }
+  .wcard:hover { transform: translateY(-5px); border-color: var(--border-bright); }
+  .wcard:hover .cov { opacity: 1; }
+  .wcard:hover .cthumb { transform: scale(1.05); }
+  .wc1 { grid-column: span 5; }
+  .wc2 { grid-column: span 7; }
+  .wc3 { grid-column: span 4; }
+  .wc4 { grid-column: span 4; }
+  .wc5 { grid-column: span 4; }
+  .wc6 { grid-column: span 6; }
+  .wc7 { grid-column: span 6; }
+
+  .cthumb-wrap { overflow: hidden; position: relative; height: 260px; }
+  .wc1 .cthumb-wrap, .wc2 .cthumb-wrap { height: 300px; }
+  .wc6 .cthumb-wrap, .wc7 .cthumb-wrap { height: 280px; }
+
+  .cthumb {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center top;
+    display: block;
+    transition: transform 0.5s cubic-bezier(.25,.8,.25,1);
+  }
+  .cthumb.contain { object-fit: contain; background: #fff; padding: 1.2rem; }
+  .cthumb.contain-dark { object-fit: contain; background: var(--surface2); padding: 0.5rem; }
+  .cov {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(11,15,12,0.95) 32%, rgba(11,15,12,0.25) 100%);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 1.3rem;
+  }
+  .cbody { padding: 0.9rem 1.1rem 1.1rem; }
+  .ccat {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+  .ctitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--text); line-height: 1.3;
+  }
+  .clink {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    margin-top: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.57rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    text-decoration: none;
+  }
+  .abadge {
+    display: inline-block;
+    background: rgba(106,191,123,0.1);
+    border: 1px solid var(--border-bright);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem; margin-bottom: 0.45rem;
+    width: fit-content;
+  }
+
+  /* Motion tween strip card */
+  .strip-card {
+    margin-top: 0.9rem;
+    display: grid; grid-template-columns: 200px 1fr;
+    background: var(--surface); border: 1px solid var(--border);
+    transition: border-color 0.3s, transform 0.3s; cursor: none;
+  }
+  .strip-card:hover { border-color: var(--border-bright); transform: translateY(-3px); }
+  .strip-thumb { height: 160px; overflow: hidden; }
+  .strip-thumb img { width: 100%; height: 100%; object-fit: contain; background: #fff; padding: 0.5rem; }
+  .strip-body {
+    padding: 1.5rem 2rem;
+    display: flex; flex-direction: column; justify-content: center; gap: 0.45rem;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 0 5vw; }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid; grid-template-columns: 0.82fr 1.18fr;
+    gap: 6rem; align-items: start;
+  }
+  .about-photo-col { position: relative; }
+  .about-stat {
+    position: absolute; top: 1.5rem; right: -18px;
+    background: var(--accent); color: #0b0f0c;
+    padding: 0.9rem 1.1rem; text-align: center; z-index: 2;
+  }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; line-height: 1; }
+  .stat-lbl { font-family: 'Space Mono', monospace; font-size: 0.48rem; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 0.25rem; }
+  .abox {
+    width: 100%; aspect-ratio: 3/4;
+    overflow: hidden; position: relative;
+    border: 1px solid var(--border);
+  }
+  .abox img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(10%); }
+  .abox::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(11,15,12,0.45) 0%, transparent 55%);
+  }
+  .alogo {
+    position: absolute; bottom: -1px; left: -1px;
+    width: 100px; height: 100px;
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    display: flex; align-items: center; justify-content: center; padding: 10px; z-index: 2;
+  }
+  .alogo img { width: 76px; }
+  .about-body p {
+    font-size: 0.96rem; line-height: 1.84;
+    color: var(--muted); margin-bottom: 1.25rem;
+  }
+  .about-body p strong { color: var(--text); font-weight: 500; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin: 1.8rem 0; }
+  .iitem {
+    padding: 0.85rem 1rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 2px solid var(--accent);
+  }
+  .ilabel {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.53rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.22rem;
+  }
+  .ivalue { font-size: 0.87rem; color: var(--text); font-weight: 500; }
+  .skills { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1.4rem; }
+  .stag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+    border: 1px solid var(--border-bright);
+    padding: 0.28rem 0.7rem; background: var(--accent-muted);
+  }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .contact-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 900; line-height: 1.02; margin-bottom: 1.4rem;
+  }
+  .contact-headline em { color: var(--accent); font-style: italic; }
+  .contact-desc { font-size: 0.96rem; color: var(--muted); line-height: 1.8; max-width: 340px; }
+  .contact-rows { display: flex; flex-direction: column; }
+  .crow {
+    display: flex; align-items: center; gap: 1.1rem;
+    padding: 1.3rem 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: var(--text);
+    transition: all 0.22s;
+  }
+  .crow:first-child { border-top: 1px solid var(--border); }
+  .crow:hover { color: var(--accent); padding-left: 0.5rem; }
+  .crow:hover .cicon { border-color: var(--border-bright); background: var(--accent-muted); }
+  .cicon {
+    width: 42px; height: 42px; flex-shrink: 0;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.22s;
+  }
+  .cicon svg { width: 17px; height: 17px; }
+  .crlabel { font-family: 'Space Mono', monospace; font-size: 0.53rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.18rem; }
+  .crvalue { font-size: 0.93rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--surface); border-top: 1px solid var(--border);
+    padding: 1.8rem 5vw;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+  .flogo { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 900; color: var(--muted); }
+  .flogo span { color: var(--accent); font-style: italic; }
+  .fnote { font-family: 'Space Mono', monospace; font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 8000;
+    background: rgba(0,0,0,0.94);
+    align-items: center; justify-content: center; padding: 2rem;
+  }
+  .lightbox.open { display: flex; }
+  .lb-inner { position: relative; max-width: 88vw; max-height: 88vh; }
+  .lb-inner img { max-width: 88vw; max-height: 82vh; object-fit: contain; display: block; }
+  .lb-close {
+    position: absolute; top: -2.2rem; right: 0;
+    font-family: 'Space Mono', monospace; font-size: 0.62rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); background: none; border: none; cursor: none; transition: color 0.2s;
+  }
+  .lb-close:hover { color: var(--accent); }
+  .lb-cap { margin-top: 0.9rem; font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-align: center; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  .reveal { opacity:0; transform:translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .d1 { transition-delay: 0.1s; }
+  .d2 { transition-delay: 0.2s; }
+  .d3 { transition-delay: 0.3s; }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity:0.018; pointer-events:none; z-index:1000;
+  }
+
+  @media (max-width:960px) {
+    .hero { grid-template-columns:1fr; text-align:center; padding-top:100px; }
+    .hero-bio { margin:0 auto 2rem; }
+    .hero-cta { justify-content:center; }
+    .hero-eyebrow,.hero-pills { justify-content:center; }
+    .hero-photo-col { display:none; }
+    .works-grid { grid-template-columns:1fr 1fr; }
+    .wc1,.wc2,.wc3,.wc4,.wc5,.wc6,.wc7 { grid-column:span 2; }
+    .about-grid,.contact-grid { grid-template-columns:1fr; }
+    .about-photo-col { display:none; }
+    .strip-card { grid-template-columns:1fr; }
+    .strip-thumb { height:200px; }
+  }
+  @media (max-width:600px) {
+    .works-grid { grid-template-columns:1fr; }
+    .wc1,.wc2,.wc3,.wc4,.wc5,.wc6,.wc7 { grid-column:span 1; }
+    .nav-links { display:none; }
+    .info-grid { grid-template-columns:1fr; }
+    .contact-grid { gap:2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLB()">
+  <div class="lb-inner" onclick="event.stopPropagation()">
+    <button class="lb-close" onclick="closeLB()">✕ Close</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-cap" id="lbCap"></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+</a><a class="nav-logo" href="#home"><img src="kln_logo.png" alt="Logo"></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-badge">BISU · BSIT</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-text">
+    <p class="hero-eyebrow">Portfolio 2025</p>
+    <div class="hero-name">Kleinhugh</div>
+    <div class="hero-name-italic">Ocharon</div>
+    <div class="hero-pills">
+      <span class="pill">IT Student</span>
+      <span class="pill">Graphic Designer</span>
+      <span class="pill">Animator</span>
+    </div>
+    <p class="hero-bio">
+      <strong>Information Technology student</strong> at Bohol Island State University – Balilihan Campus. Passionate about visual storytelling through design and animation from brand identity to motion graphics.
+    </p>
+    <div class="hero-cta">
+      <a href="#works" class="btn btn-primary">View My Works</a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-photo-col">
+    <div class="photo-wrap">
+      <img src="klen.png" alt="Kleinhugh Rotciv R. Ocharon">
+      <div class="photo-caption">Kleinhugh Rotciv R. Ocharon · BSIT 2nd Year</div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span>Graphic Design</span><span class="msep"> ✦ </span>
+    <span>Motion Tween</span><span class="msep"> ✦ </span>
+    <span>Frame-by-Frame</span><span class="msep"> ✦ </span>
+    <span>Shape Tween</span><span class="msep"> ✦ </span>
+    <span>Brand Identity</span><span class="msep"> ✦ </span>
+    <span>Infographics</span><span class="msep"> ✦ </span>
+    <span>Social Media Design</span><span class="msep"> ✦ </span>
+    <span>Calling Card</span><span class="msep"> ✦ </span>
+    <span>Adobe Animate</span><span class="msep"> ✦ </span>
+    <span>Graphic Design</span><span class="msep"> ✦ </span>
+    <span>Motion Tween</span><span class="msep"> ✦ </span>
+    <span>Frame-by-Frame</span><span class="msep"> ✦ </span>
+    <span>Shape Tween</span><span class="msep"> ✦ </span>
+    <span>Brand Identity</span><span class="msep"> ✦ </span>
+    <span>Infographics</span><span class="msep"> ✦ </span>
+    <span>Social Media Design</span><span class="msep"> ✦ </span>
+    <span>Calling Card</span><span class="msep"> ✦ </span>
+    <span>Adobe Animate</span><span class="msep"> ✦ </span>
+  </div>
+</div>
+
+<!-- WORKS -->
+<section id="works">
+  <p class="sec-label reveal">Selected Works</p>
+  <h2 class="sec-title reveal">Gallery &amp; <em>Projects</em></h2>
+
+  <div class="works-grid">
+
+    <!-- Week 1: Gucci Social Media Poster (PDF) -->
+    <div class="wcard wc1 reveal" onclick="openLB('gucci_klen.png','Week 1 · Social Media Poster — Gucci L\'Influencer')">
+      <div class="cthumb-wrap">
+        <object data="gucci_klen.png" type="application/pdf" style="width:100%;height:300px;border:none;pointer-events:none;">
+          <img src="gucci_klen.png" class="cthumb" alt="Gucci Social Media Poster">
+        </object>
+      </div>
+      <div class="cov">
+        <div class="ccat">Design Challenge — Week 1</div>
+        <div class="ctitle">Gucci L'Influencer<br>Social Media Poster</div>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Design Challenge — Week 1</div>
+        <div class="ctitle">Gucci — Social Media Poster</div>
+      </div>
+    </div>
+
+    <!-- Week 2: Nike Infographic -->
+    <div class="wcard wc2 reveal d1" onclick="openLB('Ocharon_Week2.png','Week 2 · Infographic — Nike Air Jordan Brand Overview')">
+      <div class="cthumb-wrap">
+        <img src="Ocharon_Week2.png" class="cthumb" alt="Nike Air Jordan Infographic">
+      </div>
+      <div class="cov">
+        <div class="ccat">Design Challenge — Week 2</div>
+        <div class="ctitle">Nike Air Jordan<br>Brand Infographic</div>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Design Challenge — Week 2</div>
+        <div class="ctitle">Nike Air Jordan — Infographic</div>
+      </div>
+    </div>
+
+    <!-- Week 4: Personal Logo (KORTEX) -->
+    <div class="wcard wc3 reveal" onclick="openLB('klen_logo.png','Week 4 · Personal Logo — KORTEX')">
+      <div class="cthumb-wrap" style="background:#fff;">
+        <img src="klen_logo.png" class="cthumb contain" alt="KORTEX Personal Logo">
+      </div>
+      <div class="cov">
+        <div class="ccat">Design Challenge — Week 4</div>
+        <div class="ctitle">KORTEX<br>Personal Logo</div>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Design Challenge — Week 4</div>
+        <div class="ctitle">KORTEX — Personal Logo</div>
+      </div>
+    </div>
+
+    <!-- Week 4: Calling Card Front -->
+    <div class="wcard wc4 reveal d1" onclick="openLB('Ocharon_Week4_Front.png','Week 4 · Calling Card (Front) — Kleinhugh Rotciv R. Ocharon')">
+      <div class="cthumb-wrap">
+        <img src="Ocharon_Week4_Front.png" class="cthumb" alt="Calling Card Front">
+      </div>
+      <div class="cov">
+        <div class="ccat">Design Challenge — Week 4</div>
+        <div class="ctitle">Calling Card<br>(Front)</div>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Design Challenge — Week 4</div>
+        <div class="ctitle">Calling Card — Front</div>
+      </div>
+    </div>
+
+    <!-- Week 4: Calling Card Back -->
+    <div class="wcard wc4 reveal d1" onclick="openLB('Ocharon_Week4_CallingCard.png','Week 4 · Calling Card (Back) — Kleinhugh Rotciv R. Ocharon')">
+      <div class="cthumb-wrap">
+        <img src="Ocharon_Week4_CallingCard.png" class="cthumb" alt="Calling Card Back">
+      </div>
+      <div class="cov">
+        <div class="ccat">Design Challenge — Week 4</div>
+        <div class="ctitle">Calling Card<br>(Back)</div>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Design Challenge — Week 4</div>
+        <div class="ctitle">Calling Card — Back</div>
+      </div>
+    </div>
+
+    <!-- Activity 2: Quote Design -->
+    <div class="wcard wc5 reveal d2" onclick="openLB('Ocharon_Activity2.png','Quote Design Activity — Do not wait for Opportunity, Create it.')">
+      <div class="cthumb-wrap">
+        <img src="Ocharon_Activity2.png" class="cthumb" alt="Quote Design">
+      </div>
+      <div class="cov">
+        <div class="ccat">Quote Design Activity</div>
+        <div class="ctitle">"Do not wait for Opportunity,<br>Create it."</div>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Quote Design Activity</div>
+        <div class="ctitle">"Do not wait for Opportunity, Create it."</div>
+      </div>
+    </div>
+
+    <!-- Animation Activity 1: Frame by Frame (Octopus GIF) -->
+    <div class="wcard wc6 reveal" onclick="openLB('Ocharon_An_Activity1.jpg')">
+      <div class="cthumb-wrap">
+        <img src="Ocharon_An_Activity1.jpg" class="cthumb" alt="Frame by Frame Animation">
+      </div>
+      <div class="cov">
+        <div class="abadge">Animation Exercise</div>
+        <div class="ccat">Frame-by-Frame · Activity 1</div>
+        <div class="ctitle">Underwater Octopus<br>Character Animation</div>
+        <a href="https://drive.google.com/file/d/1Ll7yX55LSSjtpsWG7sCsQxXvRKTfo_wY/view?usp=drive_link" 
+   target="_blank"
+   class="clink" 
+   onclick="event.stopPropagation()">
+          View on Drive
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Frame-by-Frame Animation · Activity 1</div>
+        <div class="ctitle">Underwater Octopus Animation</div>
+      </div>
+    </div>
+
+    <!-- Animation Activity 3: Shape/Classic Tween GIF -->
+    <div class="wcard wc7 reveal d1" onclick="openLB('Ocharon_An_Activity3..gif')">
+      <div class="cthumb-wrap">
+        <img src="Ocharon_An_Activity3..gif" class="cthumb" alt="Shape Tween Animation">
+      </div>
+      <div class="cov">
+        <div class="abadge">Animation Exercise</div>
+        <div class="ccat">Shape / Classic Tween · Activity 3</div>
+        <div class="ctitle">Tween Animation<br>Exercise 3</div>
+        <a href="https://drive.google.com/file/d/1TGw_y_ikLckc5WGnlb8oY6HytIld_wD8/view?usp=sharing" 
+   target="_blank"
+   class="clink" 
+   onclick="event.stopPropagation()">
+          View on Drive
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+      <div class="cbody">
+        <div class="ccat">Shape / Classic Tween · Activity 3</div>
+        <div class="ctitle">Tween Animation Exercise</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Motion Tween Strip Card (Activity 2) -->
+  <div class="strip-card reveal" onclick="openLB('Ocharon_An_Activity2.gif','Motion Tween · Activity 2 — American Flag Animation')">
+    <div class="strip-thumb">
+      <img src="Ocharon_An_Activity2.gif" alt="Motion Tween Animation">
+    </div>
+    <div class="strip-body">
+      <div class="abadge">Animation Exercise</div>
+      <div class="ccat">Motion Tween · Activity 2</div>
+      <div class="ctitle" style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;">American Flag — Motion Tween</div>
+      <a href="https://drive.google.com/file/d/1Ll7yX55LSSjtpsWG7sCsQxXvRKTfo_wY/view?usp=drive_link" 
+   target="_blank"
+   class="clink" 
+   onclick="event.stopPropagation()">
+        View on Drive
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12"><path d="M7 17L17 7M7 7h10v10"/></svg>
+      </a>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-photo-col reveal">
+      <div class="about-stat">
+        <div class="stat-num">2nd</div>
+        <div class="stat-lbl">Year BSIT</div>
+      </div>
+      <div class="abox">
+        <img src="klenn_prof.png" alt="Kleinhugh Ocharon">
+      </div>
+    </div>
+
+    <div class="reveal d1">
+      <p class="sec-label">About Me</p>
+      <h2 class="sec-title" style="margin-bottom:1.4rem;">The <em>Story</em><br>Behind the Work</h2>
+
+      <div class="about-body">
+        <p>Hello! I'm <strong>Kleinhugh Rotciv R. Ocharon</strong>, a 2nd year BSIT student at Bohol Island State University – Balilihan Campus with a strong foundation in system diagnostics, troubleshooting, and hardware optimization.</p>
+        <p>Technology has always been part of my everyday life, especially when it comes to solving simple computer or internet problems for friends and family. Through these hands-on experiences, I became more interested in computers, troubleshooting, and networking and eventually, <strong>design and animation</strong>.</p>
+        <p>My creative vision is to build systems and visuals that are <strong>simple, functional, and helpful</strong> for people and organizationsbdeveloping solutions that make tasks easier, faster, and more organized.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="iitem">
+          <div class="ilabel">School</div>
+          <div class="ivalue">BISU – Balilihan Campus</div>
+        </div>
+        <div class="iitem">
+          <div class="ilabel">Program</div>
+          <div class="ivalue">BS Information Technology</div>
+        </div>
+        <div class="iitem">
+          <div class="ilabel">Location</div>
+          <div class="ivalue">Bohol, Philippines</div>
+        </div>
+      </div>
+
+      <div class="skills">
+        <span class="stag">Adobe Animate</span>
+        <span class="stag">Photoshop</span>
+        <span class="stag">Illustrator</span>
+        <span class="stag">Motion Design</span>
+        <span class="stag">Typography</span>
+        <span class="stag">Branding</span>
+        <span class="stag">Infographics</span>
+        <span class="stag">System Diagnostics</span>
+        <span class="stag">Hardware Optimization</span>
+        <span class="stag">Troubleshooting</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="reveal">
+      <p class="sec-label">Contact</p>
+      <h2 class="contact-headline">Let's<br><em>Connect</em><br>&amp; Create</h2>
+      <p class="contact-desc">Open for collaborations, feedback, and creative conversations. Feel free to reach out through any of the channels below.</p>
+    </div>
+
+    <div class="contact-rows reveal d1">
+      <a href="mailto:kleinocharon@gmail.com" class="crow">
+        <div class="cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+        </div>
+        <div>
+          <div class="crlabel">Email</div>
+          <div class="crvalue">kleinocharon@gmail.com</div>
+        </div>
+      </a>
+      <a href="https://www.linkedin.com/in/kleinhugh-rotciv-ocharon-7aa27a404/" target="_blank" class="crow">
+        <div class="cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 00-4 0"/></svg>
+        </div>
+        <div>
+          <div class="crlabel">LinkedIn</div>
+          <div class="crvalue">Kleinhugh Rotciv R. Ocharon</div>
+        </div>
+      </a>
+      <a href="https://www.facebook.com/kleinhugh.ocharon.5" target="_blank" class="crow">
+        <div class="cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+        </div>
+        <div>
+          <div class="crlabel">Facebook</div>
+          <div class="crvalue">Kleinhugh Ocharon</div>
+        </div>
+      </a>
+      <div class="crow" style="cursor:default;">
+        <div class="cicon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 012 1.18 2 2 0 014 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div>
+          <div class="crlabel">Phone</div>
+          <div class="crvalue">09073717922</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="flogo">Kleinhugh <span>Ocharon</span></div>
+  <div class="fnote">© 2025 · BISU Balilihan · BSIT Portfolio</div>
+</footer>
+
+<script>
+  // Cursor
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=(mx-4)+'px'; cur.style.top=(my-4)+'px';
+  });
+  (function tick(){
+    rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14;
+    ring.style.left=(rx-15)+'px'; ring.style.top=(ry-15)+'px';
+    requestAnimationFrame(tick);
+  })();
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Lightbox
+  function openLB(src, cap) {
+    document.getElementById('lbImg').src = src;
+    document.getElementById('lbCap').textContent = cap;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLB() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lbImg').src='';
+  }
+  document.getElementById('lightbox').addEventListener('click', closeLB);
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeLB(); });
+</script>
+</body>
+</html>
